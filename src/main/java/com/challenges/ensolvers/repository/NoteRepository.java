@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
 
-    Page<NoteEntity> findAllByDeletedFalseAndArchivedFalse(Pageable pageable);
+    Page<NoteEntity> findAllByDeletedFalseAndArchivedFalseAndDeletedFromTrashFalse(Pageable pageable);
 
     Optional<NoteEntity> findByIdAndDeletedFalse(Long id);
 
@@ -25,6 +25,11 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
     @Modifying
     @Query("UPDATE NoteEntity p SET p.deleted = true WHERE p.id = :productId")
     void desactivarProduct(@Param("productId") Long productId);
+
+    @Modifying
+    @Query("UPDATE NoteEntity p SET p.deletedFromTrash = true WHERE p.id = :productId")
+    void deleteFromTrash(@Param("productId") Long productId);
+
 
     @Modifying
     @Query("UPDATE NoteEntity n SET n.archived = :archived WHERE n.id = :noteId")
@@ -38,7 +43,7 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
     @Query("UPDATE NoteEntity n SET n.deleted = false WHERE n.id = :noteId")
     void restoreNoteFromTrash(@Param("noteId") Long noteId);
 
-    @Query("SELECT n FROM NoteEntity n JOIN n.categorias c WHERE c.name = :categoryName AND n.deleted = false")
+    @Query("SELECT n FROM NoteEntity n JOIN FETCH n.categorias c WHERE c.name LIKE %:categoryName% AND n.deleted = false")
     List<NoteEntity> findAllByCategoryNameAndDeletedFalse(@Param("categoryName") String categoryName);
 
 

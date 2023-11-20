@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost/ensolvers?createDatabaseIfNotExist=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost/challenge-ensolvers?createDatabaseIfNotExist=true&serverTimezone=UTC
     username: root
     password: root
   jpa:

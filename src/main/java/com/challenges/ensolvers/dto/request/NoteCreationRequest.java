@@ -9,10 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 public class NoteCreationRequest {
-    @Schema(description = "Datos de la nota")
+    @Schema(description = "Note data")
     private NoteRequest noteRequest;
 
-    @Schema(description = "Lista de IDs de categorías asociadas a la nota")
-    private List<Long> categoryIds;  // Esta lista puede ser null o vacía
+    @Schema(description = "List of category IDs associated with the note")
+    private List<Long> categoryIds;
 
 }

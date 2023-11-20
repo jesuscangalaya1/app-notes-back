@@ -38,6 +38,8 @@ public class NoteEntity {
 
     private boolean archived;
 
+    private boolean deletedFromTrash;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "note_category",

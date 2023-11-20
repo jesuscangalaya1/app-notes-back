@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -16,15 +15,15 @@ public class NoteRequest {
             description = "Título de la nota",
             example = "Reunión con el equipo de proyecto"
     )
-    @NotBlank(message = "El título no debe estar en blanco")
-    @Size(max = 100, message = "El título debe tener como máximo {max} caracteres.")
+    @NotBlank(message = "The title should not be blank")
+    @Size(max = 100, message = "The title must have a maximum {max} characters.")
     private String title;
 
     @Schema(
             description = "Descripción o contenido de la nota",
             example = "Discutir los puntos clave del próximo lanzamiento del proyecto"
     )
-    @Size(max = 1000, message = "La descripción debe tener como máximo {max} caracteres.")
+    @Size(max = 1000, message = "The description must have at most {max} characters.")
     private String description;
 
 

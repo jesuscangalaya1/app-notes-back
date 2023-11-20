@@ -17,5 +17,6 @@ public class NoteResponse {
     private LocalDateTime creationDate;
     private LocalDateTime lastModifiedDate;
     private boolean deleted;
+    private List<CategoryResponse> categories;
 
 }

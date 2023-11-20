@@ -17,7 +17,5 @@ public class RestResponse<T> implements Serializable {
 
     private T data;
 
-/*    public RestResponse(String status, String code, String message) {
-    }*/
 
 }

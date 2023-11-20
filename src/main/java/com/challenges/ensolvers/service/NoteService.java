@@ -5,20 +5,17 @@ import com.challenges.ensolvers.dto.request.NoteRequest;
 import com.challenges.ensolvers.dto.response.NoteResponse;
 import com.challenges.ensolvers.dto.response.PageableResponse;
 
-import java.util.List;
-
 public interface NoteService {
 
-    PageableResponse<NoteResponse> paginationProducts(int numeroDePagina, int medidaDePagina,
-                                                      String ordenarPor, String sortDir);
+    PageableResponse<NoteResponse> paginationNotes(int numeroDePagina, int medidaDePagina,
+                                                   String ordenarPor, String sortDir);
 
-    NoteResponse createProduct(NoteRequest noteRequest);
 
-    NoteResponse updateProduct(Long id, NoteRequest noteRequest);
+    NoteResponse updateNote(Long id, NoteRequest noteRequest);
 
-    NoteResponse getByIdProduct(Long id);
+    NoteResponse getByIdNote(Long id);
 
-    void deleteProduct(Long id);
+    void deleteNote(Long id);
 
 
 
@@ -36,4 +33,6 @@ public interface NoteService {
 
     // create note
     NoteResponse createNote(NoteCreationRequest noteCreationRequest);
+
+    void deleteNoteById(Long id);
 }

@@ -25,15 +25,15 @@ import static com.challenges.ensolvers.util.AppConstants.*;
 @RestController
 @RequestMapping("/api/notes")
 @RequiredArgsConstructor
-@Tag(name = "NOTES", description = "Operaciones permitidas sobre la entidad Producto")
+@Tag(name = "NOTES", description = "Permitted operations on the entity Note")
 @CrossOrigin(origins = "*")
 public class NoteController {
 
     private final NoteService productService;
 
-    @Operation(summary = "Obtener la información de todos los productos paginados")
+    @Operation(summary = "Get list about all paginated actives notes")
     @GetMapping(value = "/pagination", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestResponse<PageableResponse<NoteResponse>> pageableProducts(
+    public RestResponse<PageableResponse<NoteResponse>> pageableNotes(
             @RequestParam(value = "pageNo", defaultValue = NUMERO_DE_PAGINA_POR_DEFECTO, required = false) int numeroDePagina,
             @RequestParam(value = "pageSize", defaultValue = MEDIDA_DE_PAGINA_POR_DEFECTO, required = false) int medidaDePagina,
             @RequestParam(value = "sortBy", defaultValue = ORDENAR_POR_DEFECTO, required = false) String ordenarPor,
@@ -41,65 +41,65 @@ public class NoteController {
 
         return new RestResponse<>(SUCCESS,
                 String.valueOf(HttpStatus.OK),
-                "PRODUCT SUCCESSFULLY READED",
-                productService.paginationProducts(numeroDePagina, medidaDePagina, ordenarPor, sortDir));
+                "NOTE SUCCESSFULLY READED",
+                productService.paginationNotes(numeroDePagina, medidaDePagina, ordenarPor, sortDir));
     }
 
-    @Operation(summary = "create Note")
-    @ApiResponse(responseCode = "201", description = "Producto creado exitosamente")
+    @Operation(summary = "create a new note")
+    @ApiResponse(responseCode = "201", description = "Note created successfully")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<NoteResponse> createNote(@RequestBody @Valid NoteCreationRequest noteCreationRequest) {
         NoteResponse noteResponse = productService.createNote(noteCreationRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(noteResponse);
     }
 
-    @Operation(summary = "Actualizar un producto existente por su ID")
+    @Operation(summary = "Update an existing note by its ID")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public RestResponse<NoteResponse> updateProduct(@Positive(message = "el ID solo acepta numeros positivos")
+    public RestResponse<NoteResponse> updateNote(@Positive(message = "The ID only accepts positive numbers")
             @PathVariable  Long id , @RequestBody @Valid NoteRequest productRequest) {
 
         return new RestResponse<>("SUCCESS",
                 String.valueOf(HttpStatus.OK),
-                "PRODUCT SUCCESSFULLY UPDATED",
-                productService.updateProduct(id, productRequest));
+                "NOTE SUCCESSFULLY UPDATED",
+                productService.updateNote(id, productRequest));
     }
 
-    @Operation(summary = "Obtener información de un producto por su ID")
+    @Operation(summary = "Get information about a note by its ID")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestResponse<NoteResponse> getByIdProduct(@Positive(message = "el ID solo acepta numeros positivos")
+    public RestResponse<NoteResponse> getByIdProduct(@Positive(message = "The ID only accepts positive numbers")
             @PathVariable Long id) {
 
         return new RestResponse<>(SUCCESS,
                 String.valueOf(HttpStatus.OK),
-                MESSAGE_ID_PRODUCT + id + " SUCCESSFULLY READED",
-                productService.getByIdProduct(id));
+                MESSAGE_ID_NOTE + id + " SUCCESSFULLY READED",
+                productService.getByIdNote(id));
     }
 
 
-    @Operation(summary = "Eliminar un producto por su ID")
+    @Operation(summary = "send the note to the trash")
     @PatchMapping(value = "/{id}")
-    public RestResponse<String> deleteProduct(@Positive(message = "el ID solo acepta numeros positivos")
+    public RestResponse<String> deleteNoteById(@Positive(message = "The ID only accepts positive numbers")
             @PathVariable Long id) {
 
-        productService.deleteProduct(id);
+        productService.deleteNote(id);
         return new RestResponse<>(SUCCESS,
                 String.valueOf(HttpStatus.OK),
-                MESSAGE_ID_PRODUCT + id + " SUCCESSFULLY DELETED",
+                MESSAGE_ID_NOTE + id + " SUCCESSFULLY DELETED",
                 "null"); // Data null.
     }
 
-
+    @Operation(summary = "Archive and unarchive a note")
     @PatchMapping("/{id}/archive")
     public RestResponse<String > archiveUnarchiveNote(@PathVariable Long id,
                                                      @RequestParam boolean archived) {
         productService.archiveUnarchiveNote(id, archived);
         return new RestResponse<>(SUCCESS,
                 String.valueOf(HttpStatus.OK),
-                MESSAGE_ID_PRODUCT + id + " SUCCESSFULLY ARCHIVED",
+                MESSAGE_ID_NOTE + id + " SUCCESSFULLY ARCHIVED",
                 "null"); // Data null.
     }
 
-    @Operation(summary = "Obtener la información de todos los productos paginados")
+    @Operation(summary = "Get the list of all paginated archived notes")
     @GetMapping(value = "/archived", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse<PageableResponse<NoteResponse>> getAllArchivedNotes(
             @RequestParam(value = "pageNo", defaultValue = NUMERO_DE_PAGINA_POR_DEFECTO, required = false) int numeroDePagina,
@@ -109,23 +109,12 @@ public class NoteController {
 
         return new RestResponse<>(SUCCESS,
                 String.valueOf(HttpStatus.OK),
-                "PRODUCT SUCCESSFULLY READED",
+                "NOTE SUCCESSFULLY READED",
                 productService.getAllArchivedNotes(numeroDePagina, medidaDePagina, ordenarPor, sortDir));
     }
 
-    @Operation(summary = "restoreNote un producto por su ID")
-    @PatchMapping(value = "/{id}/restore")
-    public RestResponse<String> restoreNote(@Positive(message = "el ID solo acepta numeros positivos")
-                                              @PathVariable Long id) {
 
-        productService.restoreNote(id);
-        return new RestResponse<>(SUCCESS,
-                String.valueOf(HttpStatus.OK),
-                MESSAGE_ID_PRODUCT + id + " SUCCESSFULLY RESTORE NOTE",
-                "null"); // Data null.
-    }
-
-    @Operation(summary = "Obtener la información de todos los productos paginados")
+    @Operation(summary = "Get the list of all deleted paginated notes")
     @GetMapping(value = "/deleted", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestResponse<PageableResponse<NoteResponse>> getAllDeletedByTrue(
             @RequestParam(value = "pageNo", defaultValue = NUMERO_DE_PAGINA_POR_DEFECTO, required = false) int numeroDePagina,
@@ -135,9 +124,35 @@ public class NoteController {
 
         return new RestResponse<>(SUCCESS,
                 String.valueOf(HttpStatus.OK),
-                "PRODUCT SUCCESSFULLY READED",
+                "NOTE SUCCESSFULLY READED",
                 productService.getAllDeletedByTrue(numeroDePagina, medidaDePagina, ordenarPor, sortDir));
     }
+
+    @Operation(summary = "restore a note by its ID")
+    @PatchMapping(value = "/{id}/restore")
+    public RestResponse<String> restoreNote(@Positive(message = "The ID only accepts positive numbers")
+                                            @PathVariable Long id) {
+
+        productService.restoreNote(id);
+        return new RestResponse<>(SUCCESS,
+                String.valueOf(HttpStatus.OK),
+                MESSAGE_ID_NOTE + id + " SUCCESSFULLY RESTORE NOTE",
+                "null"); // Data null.
+    }
+
+    @Operation(summary = "permanently delete a note by its ID")
+
+    @DeleteMapping("/{id}")
+    public RestResponse<String> deleteNote(@Positive(message = "The ID only accepts positive numbers")
+                                            @PathVariable Long id) {
+
+        productService.deleteNoteById(id);
+        return new RestResponse<>(SUCCESS,
+                String.valueOf(HttpStatus.OK),
+                MESSAGE_ID_NOTE + id + " SUCCESSFULLY DELETED PERMANENTLY",
+                "null"); // Data null.
+    }
+
 }
 
 
